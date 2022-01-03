@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const request = require("request");
-condt https = require("https");
+const https = require("https");
 
 const app = express();
 app.use(express.static("public"));
@@ -19,25 +19,34 @@ app.post("/",function(req,res){
   const lname = req.body.lname;
   const email = req.body.email;
   console.log(fname , lname , email);
-})
+
 
 const data={
   members: [
     {
       email_address: email,
       status:"subscribed",
-      merge_feilds: {
-        FNAME: fname;
-        LNAME: lname;
+      merge_fields: {
+        FNAME: fname,
+        LNAME: lname,
       }
     }
   ]
 };
 
 const jsonData = JSON.stringify(data);
+const url ="https://us20.api.mailchimp.com/3.0/lists/a004e257e7";
+const options ={
+  method:"POST",
+  auth:"Atul:21b2e03debb5ddb466f46dfbabcc406d-us20"
+};
 
-https.request(url,options,functions(response){
-  
+const request1=https.request(url,options,function(response){
+  response.on("data",function(data){
+    console.log(JSON.parse(data));
+  })
+
 })
-
-//66676dca6d27086daec7f2ef8e7f37fc-us20
+request1.write(jsonData);
+request1.end();
+});
